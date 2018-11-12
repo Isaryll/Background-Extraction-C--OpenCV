@@ -11,6 +11,7 @@ Command Line Arguments
 ----------------------
 
 Examples:
+
             Automatic compilation
             ./compile.sh
             
