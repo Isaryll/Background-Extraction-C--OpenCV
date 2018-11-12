@@ -46,7 +46,7 @@ Mat Background::foreground(const Mat& frame, const Mat& background) {
 	cvtColor(Mat(background - frame), foreground, CV_BGR2GRAY);
 	for(int i = 0; i < lines; i++){
 		for (int j = 0; j < columns; j++){
-			if( foreground.at<uchar>(i,j) > 10)
+			if( foreground.at<uchar>(i,j) > LTHRESHOLD)
 				foreground.at<uchar>(i,j) = 255;
 			else
 				foreground.at<uchar>(i,j) = 0;
