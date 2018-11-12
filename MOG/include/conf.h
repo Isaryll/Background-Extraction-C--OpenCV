@@ -11,11 +11,12 @@
 #include <opencv2/opencv.hpp>
 
 #define K 				5
-#define MATCHING		0.5
-#define ALPHA 			0.9
-#define PART			15.74
-#define THRESHOLD		0.3
+#define LTHRESHOLD		5
+#define MATCHING		2.5
+#define ALPHA 			0.7
+#define THRESHOLD		0.6
 #define WEIGHT			0.2
 #define DEVIATTION		0.8
+#define PART			15.74
 
 #endif /* INCLUDE_CONF_H_ */
