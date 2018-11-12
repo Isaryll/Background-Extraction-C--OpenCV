@@ -15,7 +15,7 @@
 #define ALPHA 			0.9
 #define PART			15.74
 #define THRESHOLD		0.3
-#define WEIGHT			0.9
-#define DEVIATTION		0.9
+#define WEIGHT			0.2
+#define DEVIATTION		0.8
 
 #endif /* INCLUDE_CONF_H_ */
