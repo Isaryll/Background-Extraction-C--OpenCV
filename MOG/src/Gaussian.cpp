@@ -17,8 +17,7 @@ void Gaussian::setDev(const double& d) {
 
 double Gaussian::prob(const cv::Vec3b& current) const {
 	Vec3b temp = Vec3b(current - media);
-	//Mat cov = Mat::eye(3, 3, CV_64F) * dev;
-	double num = exp(-0.5 * (temp.val[0] * temp.val[0] + temp.val[1] * temp.val[1] + temp.val[2] * temp.val[2])/dev);
+	double num = exp(-0.5 * (temp.val[0] * temp.val[0] + temp.val[1] * temp.val[1] + temp.val[2] * temp.val[2]) * dev);
 	double den = PART * pow(dev, 0.5);
 	return num/den;
 }

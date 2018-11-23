@@ -21,7 +21,7 @@ private:
 public:
 	GList();
 
-	void update (const Vec3b& current);
+	int update (const Vec3b& current);
 	double prob (const Vec3b& current);
 	void sort ();
 	Vec3b getBestDistributions ();

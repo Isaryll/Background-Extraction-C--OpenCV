@@ -37,7 +37,8 @@ int main(int argc, char* argv[]) {
 
     namedWindow("Frame");
     namedWindow("Background");
-    namedWindow("Segmentation");
+    namedWindow("Segmentation By Subtraction");
+    namedWindow("Segmentation By Match");
 
     if(strcmp(argv[1], "-vid") == 0) {
         //input data coming from a video
@@ -74,8 +75,8 @@ void processVideo(char* filename) {
 			cerr << "Exiting..." << endl;
 			exit(EXIT_FAILURE);
 		}
-		//resize(frame, frame, Size(frame.cols/2,frame.rows/2, 3));
-		GaussianBlur(frame, frame, Size(3, 3), 1.7);
+
+		//GaussianBlur(frame, frame, Size(3, 3), 1.7);
 
 		background = model.startB(frame);
 
@@ -87,7 +88,8 @@ void processVideo(char* filename) {
 		out_capture.write(background);
         imshow("Frame", frame);
         imshow("Background", background);
-        imshow("Segmentation", model.foreground(frame, background));
+        imshow("Segmentation By Subtraction", model.foreground(frame, background));
+        imshow("Segmentation By Match", model.segm);
 
         keyboard = waitKey(30);
         capture >> frame;

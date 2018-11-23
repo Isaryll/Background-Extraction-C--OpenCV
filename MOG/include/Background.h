@@ -20,6 +20,7 @@ private:
 	vector< vector<GList> > model;
 	int lines, columns;
 public:
+	Mat segm = Mat (120, 160, CV_8UC1);
 	Background (): lines(0), columns(0){};
 	Background (const Mat& frame);
 

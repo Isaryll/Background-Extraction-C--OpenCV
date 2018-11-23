@@ -36,9 +36,16 @@ void Background::init(const Mat& frame)
 }
 
 void Background::update(const cv::Mat& frame) {
-	for(int i = 0; i < lines; i++)
-		for(int j = 0; j < columns; j++)
-			model[i][j].update(frame.at<Vec3b>(i, j));
+	int flag = 0;
+	for(int i = 0; i < lines; i++) {
+		for(int j = 0; j < columns; j++) {
+			flag = model[i][j].update(frame.at<Vec3b>(i, j));
+			if(flag == 0) // foreground
+				segm.at<uchar>(i,j) = 0;
+			else // background
+				segm.at<uchar>(i,j) = 255;
+		}
+	}
 }
 
 Mat Background::foreground(const Mat& frame, const Mat& background) {

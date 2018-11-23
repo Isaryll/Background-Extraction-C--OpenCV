@@ -9,23 +9,25 @@
 
 GList::GList():listOfDist(K) {}
 
-void GList::update(const Vec3b& current) {
+int GList::update(const Vec3b& current) {
 	Gaussian gaussian(current);
-
+	int flag = 0;
+	Vec3b m, stdv;
 	for(int i = 0; i < K; i++) {
 		Vec3d temp = Vec3b(current - listOfDist[i].getMedia());
-
-		if (sqrt(norm(temp)) > MATCHING * listOfDist[i].getDev()) {
-			listOfDist[K-1].setWeight(WEIGHT);
-			listOfDist[K-1].setMedia(current);
-			listOfDist[K-1].setDev(DEVIATTION);
-		} else {
+		if (sqrt(norm(temp)) <= MATCHING * listOfDist[i].getDev()) { // background
 			listOfDist[i].setWeight((1-ALPHA) * listOfDist[i].getWeight() + ALPHA);
 			double ro = ALPHA * listOfDist[i].prob(current);
 			listOfDist[i].setMedia((1-ro) * listOfDist[i].getMedia() + ro * current);
 			Mat mat(temp);
 			listOfDist[i].setDev((1-ro) * listOfDist[i].getDev() + ro * Mat(mat.t() * mat).at<double>(0,0));
+			flag++;			
+		} else { // foreground
+			listOfDist[K-1].setWeight(WEIGHT);
+			listOfDist[K-1].setMedia(current);
+			listOfDist[K-1].setDev(DEVIATTION);
 		}
+
 	}
 	sort();
 	double sum = 0;
@@ -36,6 +38,7 @@ void GList::update(const Vec3b& current) {
 	for (int i = 0; i < K; i++) {
 		listOfDist[i].setWeight(listOfDist[i].getWeight()/sum);
 	}
+	return flag;
 }
 
 double GList::prob(const Vec3b& current) {
@@ -67,7 +70,7 @@ Vec3b GList::getBestDistributions() {
 	double thresh = 0;
 	double sum = 0;
 	double weight = 0;
-	Vec3b final = 0;
+	Vec3b final;
 	for(int i = 0; i < K; i++) {
 		thresh += listOfDist[i].getWeight();
 		if(thresh <= THRESHOLD) {
@@ -81,5 +84,8 @@ Vec3b GList::getBestDistributions() {
 		weight = listOfDist[i].getWeight()/sum;
 		final += listOfDist[i].getMedia() * weight;
 	}
+	/*for(int i = 0; i < dist; i++) {
+		final += listOfDist[i].getDev() * listOfDist[i].getWeight();
+	}*/
 	return final;
 }
