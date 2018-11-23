@@ -76,7 +76,7 @@ void processVideo(char* filename) {
 			exit(EXIT_FAILURE);
 		}
 
-		//GaussianBlur(frame, frame, Size(3, 3), 1.7);
+		GaussianBlur(frame, frame, Size(3, 3), 1.7);
 
 		background = model.startB(frame);
 
