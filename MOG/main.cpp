@@ -76,7 +76,7 @@ void processVideo(char* filename) {
 			exit(EXIT_FAILURE);
 		}
 
-		GaussianBlur(frame, frame, Size(3, 3), 1.7);
+		//GaussianBlur(frame, frame, Size(3, 3), 1.7);
 
 		background = model.startB(frame);
 
@@ -85,7 +85,9 @@ void processVideo(char* filename) {
 		string frameN = frameNumber.str();
 		putText(frame, frameN.c_str(), Point(15, 15), FONT_HERSHEY_SIMPLEX, 0.5 , Scalar(0,0,0));
 		putText(background, frameN.c_str(), Point(15, 15), FONT_HERSHEY_SIMPLEX, 0.5 , Scalar(0,0,0));
+		
 		out_capture.write(background);
+        
         imshow("Frame", frame);
         imshow("Background", background);
         imshow("Segmentation By Subtraction", model.foreground(frame, background));
@@ -96,11 +98,3 @@ void processVideo(char* filename) {
 	}
 	capture.release();
 }
-
-
-
-
-
-
-
-

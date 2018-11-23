@@ -11,6 +11,19 @@ Background::Background(const Mat& frame): lines(frame.rows), columns(frame.cols)
 	init(frame);
 }
 
+void Background::init(const Mat& frame)
+{
+	if(!lines && !columns) {
+		lines = frame.rows;
+		columns = frame.cols;
+	}
+	model = vector< vector<GList> >(lines, vector<GList>(columns));
+
+	for (int i = 0; i < lines; i++)
+		for(int j = 0; j < columns; j++)
+			model[i][j].init(frame.at<Vec3b>(i, j));
+}
+
 Mat Background::startB(const Mat& frame) {
 	update(frame);
 	Mat bg(lines, columns,CV_8UC3);
@@ -20,19 +33,6 @@ Mat Background::startB(const Mat& frame) {
 			bg.at<Vec3b>(i,j) = model[i][j].getBestDistributions();
 
 	return bg;
-}
-
-void Background::init(const Mat& frame)
-{
-	if(!lines && !columns) {
-		lines = frame.rows;
-		columns= frame.cols;
-	}
-	model = vector< vector<GList> >(lines, vector<GList>(columns));
-
-	for (int i = 0; i < lines; i++)
-		for(int j = 0; j < columns; j++)
-			model[i][j].init(frame.at<Vec3b>(i, j));
 }
 
 void Background::update(const cv::Mat& frame) {
