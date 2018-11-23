@@ -25,12 +25,30 @@ void Background::init(const Mat& frame)
 }
 
 Mat Background::startB(const Mat& frame) {
+	int dist = 0, flag = 0;
 	update(frame);
 	Mat bg(lines, columns,CV_8UC3);
 
-	for (int i = 0; i < lines; i++)
-		for (int j = 0; j < columns; j++)
-			bg.at<Vec3b>(i,j) = model[i][j].getBestDistributions();
+	for (int i = 0; i < lines; i++) {
+		for (int j = 0; j < columns; j++) {
+			bg.at<Vec3b>(i,j) = model[i][j].getBestDistributions(dist);
+			
+			for(int k = 0; k < dist; k++){
+				Vec3d temp = Vec3d(frame.at<Vec3b>(i,j)) - Vec3d(model[i][j].listOfDist[k].getMedia());
+				if (norm(temp/255) <= MATCHING * model[i][j].listOfDist[k].getDev())
+					flag++;
+			}
+			
+			if(flag == 0) // foreground
+				segm.at<uchar>(i,j) = 255;
+			else // background
+				segm.at<uchar>(i,j) = 0;
+			
+			flag = 0;
+		}
+	}
+	
+
 
 	return bg;
 }
@@ -38,15 +56,9 @@ Mat Background::startB(const Mat& frame) {
 void Background::update(const cv::Mat& frame) {
 	int flag = 0;
 	
-	for(int i = 0; i < lines; i++) {
-		for(int j = 0; j < columns; j++) {
-			flag = model[i][j].update(frame.at<Vec3b>(i, j));
-			if(flag == 0) // foreground
-				segm.at<uchar>(i,j) = 0;
-			else // background
-				segm.at<uchar>(i,j) = 255;
-		}
-	}
+	for(int i = 0; i < lines; i++)
+		for(int j = 0; j < columns; j++)
+			model[i][j].update(frame.at<Vec3b>(i, j));
 }
 
 Mat Background::foreground(const Mat& frame, const Mat& background) {

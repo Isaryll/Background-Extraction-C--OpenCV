@@ -9,26 +9,24 @@
 
 GList::GList():listOfDist(K) {}
 
-int GList::update(const Vec3b& current) {
+void GList::update(const Vec3b& current) {
 	Gaussian gaussian(current);
-	int flag = 0;
 	double sum = 0;
 
 	for(int i = 0; i < K; i++) {
-		Vec3d temp = Vec3b(current - listOfDist[i].getMedia());
-		if (sqrt(norm(temp)) <= MATCHING * listOfDist[i].getDev()) { // background
+		Vec3d temp = Vec3d(current) - Vec3d(listOfDist[i].getMedia());
+		//cout << norm(temp) << endl;
+		if (norm(temp/255) <= MATCHING * listOfDist[i].getDev()) { // background
 			listOfDist[i].setWeight((1-ALPHA) * listOfDist[i].getWeight() + ALPHA);
 			double ro = ALPHA * listOfDist[i].prob(current);
 			listOfDist[i].setMedia((1-ro) * listOfDist[i].getMedia() + ro * current);
 			Mat mat(temp);
-			listOfDist[i].setDev((1-ro) * listOfDist[i].getDev() + ro * Mat(mat.t() * mat).at<double>(0,0));
-			flag++;			
+			listOfDist[i].setDev((1-ro) * listOfDist[i].getDev() + ro * Mat(mat.t() * mat).at<double>(0,0));			
 		} else { // foreground
 			listOfDist[K-1].setWeight(WEIGHT);
 			listOfDist[K-1].setMedia(current);
 			listOfDist[K-1].setDev(DEVIATTION);
 		}
-
 	}
 
 	sort();
@@ -40,8 +38,6 @@ int GList::update(const Vec3b& current) {
 	for (int i = 0; i < K; i++) {
 		listOfDist[i].setWeight(listOfDist[i].getWeight()/sum);
 	}
-
-	return flag;
 }
 
 double GList::prob(const Vec3b& current) {
@@ -72,12 +68,12 @@ void GList::init(const Vec3b& current) {
 	}
 }
 
-Vec3b GList::getBestDistributions() {
+Vec3b GList::getBestDistributions(int &distr) {
 	int dist = 1;
 	double thresh = 0;
 	double sum = 0;
 	double weight = 0;
-	Vec3b final;
+	Vec3b final = {0,0,0};
 
 	for(int i = 0; i < K; i++) {
 		thresh += listOfDist[i].getWeight();
@@ -86,18 +82,11 @@ Vec3b GList::getBestDistributions() {
 		}
 	}
 
-	for (int i = 0; i < dist; i++) {
-		sum += listOfDist[i].getWeight();
-	}
-
 	for(int i = 0; i < dist; i++) {
-		weight = listOfDist[i].getWeight()/sum;
-		final += listOfDist[i].getMedia() * weight;
+		final += listOfDist[i].getMedia() * listOfDist[i].getWeight();
 	}
 
-	/*for(int i = 0; i < dist; i++) {
-		final += listOfDist[i].getDev() * listOfDist[i].getWeight();
-	}*/
-
+	distr = dist;
+	
 	return final;
 }

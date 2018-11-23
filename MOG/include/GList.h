@@ -15,16 +15,16 @@
 using namespace std;
 
 class GList {
-private:
+public:
 	vector<Gaussian> listOfDist;
 
 public:
 	GList();
 
-	int update (const Vec3b& current);
+	void update (const Vec3b& current);
 	double prob (const Vec3b& current);
 	void sort ();
-	Vec3b getBestDistributions ();
+	Vec3b getBestDistributions (int &distr);
 	void init (const Vec3b& current);
 };
 

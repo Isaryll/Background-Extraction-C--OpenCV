@@ -12,9 +12,9 @@
 
 #define K 				5
 #define LTHRESHOLD		5
-#define MATCHING		2.5
-#define ALPHA 			0.7
-#define THRESHOLD		0.6
+#define MATCHING		1
+#define ALPHA 			0.3
+#define THRESHOLD		0.2
 #define WEIGHT			0.2
 #define DEVIATTION		0.8
 #define PART			15.74

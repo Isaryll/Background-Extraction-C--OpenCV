@@ -23,7 +23,7 @@ class Gaussian {
 		double weight;
 
 	public:
-		Gaussian(const Vec3b& media = 0, const double& dev = 0.2, const double& weight = 1/100);
+		Gaussian(const Vec3b& media = 0, const double& dev = 0.2, const double& weight = 1/ALPHA);
         inline void	setMedia (const Vec3b&	m) { media = m;  }
 		inline void setWeight (const double& w) { weight = w; }
 		void setDev (const double&	d) { dev = d; }				
