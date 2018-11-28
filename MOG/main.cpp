@@ -23,10 +23,18 @@
 using namespace cv;
 using namespace std;
 
-int keyboard; //input from keyboard
+int keyboard;
 
 void processVideo(char* filename);
 
+/**
+ * Main function. Represents the verifications about the file description.
+ * Includes a function about the video processing.
+ * @param argc argument about the file description
+ * @param argv argument about the file name
+ * @return     closes the program
+ * @see        an image by frame
+ */
 int main(int argc, char* argv[]) {
 
     if(argc != 3) {
@@ -41,11 +49,9 @@ int main(int argc, char* argv[]) {
     namedWindow("Segmentation By Match");
 
     if(strcmp(argv[1], "-vid") == 0) {
-        //input data coming from a video
     	processVideo(argv[2]);
     }
     else {
-        //error in reading input parameters
         cerr << "Please, check the input parameters." << endl;
         cerr << "Exiting..." << endl;
         return EXIT_FAILURE;
@@ -55,10 +61,18 @@ int main(int argc, char* argv[]) {
     return EXIT_SUCCESS;
 }
 
+
+/**
+ * That function represents all the process for the background subtraction/segmentation.
+ * Needs to call Background Class. Saves a video result.
+ * @param filename video name
+ * @return         void
+ * @see            background subtraction
+ */
 void processVideo(char* filename) {
 	VideoCapture capture(filename);
+	
 	if(!capture.isOpened()) {
-		//error in opening the video input
 		cerr << "Unable to open video file: " << filename << endl;
 		exit(EXIT_FAILURE);
     }
@@ -67,7 +81,7 @@ void processVideo(char* filename) {
 	Mat background;
 	capture >> frame;
 	Background model(frame);
-	VideoWriter out_capture("teste.avi", CV_FOURCC('M','J','P','G'), 30, Size(160,120));
+	VideoWriter out_capture("output.avi", CV_FOURCC('M','J','P','G'), 30, Size(160,120));
 
 	while(true) {
 		if(!capture.read(frame)) {
@@ -76,7 +90,7 @@ void processVideo(char* filename) {
 			exit(EXIT_FAILURE);
 		}
 
-		//GaussianBlur(frame, frame, Size(3, 3), 1.7);
+		GaussianBlur(frame, frame, Size(3, 3), 1.7);
 
 		background = model.startB(frame);
 
@@ -94,7 +108,12 @@ void processVideo(char* filename) {
         imshow("Segmentation By Match", model.segm);
 
         keyboard = waitKey(30);
+        
+        if (keyboard == 27)
+			break;
+        
         capture >> frame;
 	}
+
 	capture.release();
 }

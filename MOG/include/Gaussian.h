@@ -23,14 +23,14 @@ class Gaussian {
 		double weight;
 
 	public:
-		Gaussian(const Vec3b& media = 0, const double& dev = 0.2, const double& weight = 1/ALPHA);
+		Gaussian(const Vec3b& media = 0, const double& dev = DEVIATTION, const double& weight = WEIGHT);
         inline void	setMedia(const Vec3b&	m) { media = m;  }
 		inline void setWeight(const double& w) { weight = w; }
 		void setDev(const double&	d) { dev = d; }				
         inline Vec3b getMedia() const { return media; }
 		inline double getDev() const { return dev; }
 		inline double getWeight() const { return weight; }
-		double prob(const Vec3b& current) const;
+		double prob(const Vec3b& current);
 };
 
 #endif /* INCLUDE_GAUSSIAN_H_ */
