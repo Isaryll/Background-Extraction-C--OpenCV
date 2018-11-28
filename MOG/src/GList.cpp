@@ -51,7 +51,6 @@ double GList::prob(const Vec3b& current) {
 }
 
 void GList::sort() {
-
 	for (int i = 0; i < K-1; i++) {
 		if((listOfDist[i].getWeight()/listOfDist[i].getDev()) < (listOfDist[i+1].getWeight()/listOfDist[i+1].getDev())) {
 			Gaussian temp = listOfDist[i];
@@ -62,7 +61,6 @@ void GList::sort() {
 }
 
 void GList::init(const Vec3b& current) {
-
 	for (int i = 0; i < K; i++){
 		listOfDist[i] = Gaussian(current);
 	}

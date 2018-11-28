@@ -11,14 +11,7 @@ Background::Background(const Mat& frame): lines(frame.rows), columns(frame.cols)
 	init(frame);
 }
 
-void Background::init(const Mat& frame)
-{
-	if(!lines && !columns) {
-		lines = frame.rows;
-		columns = frame.cols;
-	}
-	model = vector< vector<GList> >(lines, vector<GList>(columns));
-
+void Background::init(const Mat& frame) {
 	for (int i = 0; i < lines; i++)
 		for(int j = 0; j < columns; j++)
 			model[i][j].init(frame.at<Vec3b>(i, j));
@@ -47,12 +40,11 @@ Mat Background::startB(const Mat& frame) {
 			flag = 0;
 		}
 	}
-	
+
 	return bg;
 }
 
 void Background::update(const cv::Mat& frame) {
-	
 	for(int i = 0; i < lines; i++)
 		for(int j = 0; j < columns; j++)
 			model[i][j].update(frame.at<Vec3b>(i, j));
@@ -70,5 +62,6 @@ Mat Background::foreground(const Mat& frame, const Mat& background) {
 				foreground.at<uchar>(i,j) = 0;
 		}
 	}
+	
 	return foreground;
 }
