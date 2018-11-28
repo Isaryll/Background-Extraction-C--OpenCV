@@ -48,13 +48,10 @@ Mat Background::startB(const Mat& frame) {
 		}
 	}
 	
-
-
 	return bg;
 }
 
 void Background::update(const cv::Mat& frame) {
-	int flag = 0;
 	
 	for(int i = 0; i < lines; i++)
 		for(int j = 0; j < columns; j++)

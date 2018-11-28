@@ -71,8 +71,6 @@ void GList::init(const Vec3b& current) {
 Vec3b GList::getBestDistributions(int &distr) {
 	int dist = 1;
 	double thresh = 0;
-	double sum = 0;
-	double weight = 0;
 	Vec3b final = {0,0,0};
 
 	for(int i = 0; i < K; i++) {
