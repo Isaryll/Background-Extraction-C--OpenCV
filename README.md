@@ -1,10 +1,10 @@
-# Segmentation and Detection of a Parking Spaces
+# Background Extraction in C++ with OpenCV
 
 -----
 About
 -----
 
-This is a thesis project aims to develop a method of segmentation and detection of parking spaces.
+This is a thesis part project aims to develop a Background Extraction method.
 
 ----------------------
 Command Line Arguments
@@ -27,7 +27,7 @@ Design Decisions & Issues
 
 No decisions for a while.
 
-Class Hierachy are not implemmented yet.
+Class Hierachy is not described yet.
 
 -----------------------
 Word Frequency Analysis
